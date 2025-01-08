@@ -1,0 +1,97 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Dictionary untuk menyimpan data pengguna
+data_pengguna = {}
+
+# Fungsi untuk beralih halaman
+def switch_to_register():
+    frame_login.pack_forget()
+    frame_register.pack()
+
+def switch_to_login():
+    frame_register.pack_forget()
+    frame_login.pack()
+
+# Fungsi untuk register
+def register():
+    username = entry_register_username.get().strip()
+    password = entry_register_password.get().strip()
+    
+    if username and password:
+        if username in data_pengguna:
+            messagebox.showwarning("Peringatan", "Username sudah terdaftar.")
+        elif len(password) < 6:
+            messagebox.showwarning("Peringatan", "Password harus minimal 6 karakter.")
+        else:
+            data_pengguna[username] = password
+            messagebox.showinfo("Berhasil", "Registrasi berhasil!")
+            entry_register_username.delete(0, tk.END)
+            entry_register_password.delete(0, tk.END)
+            switch_to_login()
+    else:
+        messagebox.showwarning("Peringatan", "Username dan Password tidak boleh kosong.")
+
+# Fungsi untuk login
+def login():
+    username = entry_login_username.get().strip()
+    password = entry_login_password.get().strip()
+    
+    if username and password:
+        if username in data_pengguna and data_pengguna[username] == password:
+            messagebox.showinfo("Berhasil", f"Selamat datang, {username}!")
+            entry_login_username.delete(0, tk.END)
+            entry_login_password.delete(0, tk.END)
+        else:
+            messagebox.showerror("Gagal", "Username atau Password salah.")
+    else:
+        messagebox.showwarning("Peringatan", "Username dan Password tidak boleh kosong.")
+
+# Membuat antarmuka Tkinter
+root = tk.Tk()
+root.title("Login dan Register")
+
+# Set background color untuk root window
+root.config(bg="#f0f0f0")
+
+# Frame Login
+frame_login = tk.Frame(root, bg="#f0f0f0")
+frame_login.pack(padx=20, pady=20)
+
+# Menambahkan logo atau gambar (misalnya)
+tk.Label(frame_login, text="MyDick", font=("Arial", 24, "bold"), bg="#f0f0f0", fg="#4CAF50").pack(pady=20)
+
+tk.Label(frame_login, text="Username:", font=("Arial", 12), bg="#f0f0f0").pack(pady=5)
+entry_login_username = tk.Entry(frame_login, font=("Arial", 12), bd=2, relief="solid", width=30)
+entry_login_username.pack(pady=5)
+
+tk.Label(frame_login, text="Password:", font=("Arial", 12), bg="#f0f0f0").pack(pady=5)
+entry_login_password = tk.Entry(frame_login, font=("Arial", 12), bd=2, relief="solid", show="*", width=30)
+entry_login_password.pack(pady=5)
+
+# Tombol Login dan Register
+tk.Button(frame_login, text="Login", font=("Arial", 12, "bold"), bg="#4CAF50", fg="white", command=login, width=20).pack(pady=10)
+tk.Button(frame_login, text="Belum punya akun? Register", font=("Arial", 12), fg="#4CAF50", bg="#f0f0f0", command=switch_to_register).pack(pady=10)
+
+# Frame Register
+frame_register = tk.Frame(root, bg="#f0f0f0")
+
+tk.Label(frame_register, text="Registrasi Pengguna", font=("Arial", 24, "bold"), bg="#f0f0f0", fg="#4CAF50").pack(pady=20)
+
+tk.Label(frame_register, text="Username:", font=("Arial", 12), bg="#f0f0f0").pack(pady=5)
+entry_register_username = tk.Entry(frame_register, font=("Arial", 12), bd=2, relief="solid", width=30)
+entry_register_username.pack(pady=5)
+
+tk.Label(frame_register, text="Password:", font=("Arial", 12), bg="#f0f0f0").pack(pady=5)
+entry_register_password = tk.Entry(frame_register, font=("Arial", 12), bd=2, relief="solid", show="*", width=30)
+entry_register_password.pack(pady=5)
+
+# Tombol Register dan Login
+tk.Button(frame_register, text="Register", font=("Arial", 12, "bold"), bg="#4CAF50", fg="white", command=register, width=20).pack(pady=10)
+tk.Button(frame_register, text="Sudah punya akun? Login", font=("Arial", 12), fg="#4CAF50", bg="#f0f0f0", command=switch_to_login).pack(pady=10)
+
+# Menampilkan halaman login terlebih dahulu
+frame_register.pack_forget()
+
+# Menjalankan aplikasi
+root.mainloop()
